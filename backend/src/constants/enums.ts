@@ -41,3 +41,19 @@ export const InventoryAlertLevelLabel: Record<InventoryAlertLevel, string> = {
   [InventoryAlertLevel.LOW]: '低库存',
   [InventoryAlertLevel.CRITICAL]: '严重不足',
 };
+
+export enum PurchaseOrderStatus {
+  PENDING_APPROVAL = 'PENDING_APPROVAL',
+  APPROVED = 'APPROVED',
+  PARTIAL_RECEIVED = 'PARTIAL_RECEIVED',
+  CLOSED = 'CLOSED',
+  CANCELLED = 'CANCELLED',
+}
+
+export const PurchaseOrderStatusLabel: Record<PurchaseOrderStatus, string> = {
+  [PurchaseOrderStatus.PENDING_APPROVAL]: '待审核',
+  [PurchaseOrderStatus.APPROVED]: '待到货',
+  [PurchaseOrderStatus.PARTIAL_RECEIVED]: '部分到货',
+  [PurchaseOrderStatus.CLOSED]: '已关闭',
+  [PurchaseOrderStatus.CANCELLED]: '已取消',
+};

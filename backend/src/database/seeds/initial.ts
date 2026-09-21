@@ -1,7 +1,7 @@
 import { v4 as uuid } from 'uuid';
-import { InventoryAlertLevel, ShipmentStatus, SupplierStatus } from '../../constants/enums.js';
+import { InventoryAlertLevel, PurchaseOrderStatus, ShipmentStatus, SupplierStatus } from '../../constants/enums.js';
 import { PERMISSIONS } from '../../constants/permissions.js';
-import type { AuditLog, Inventory, Shipment, Supplier, User, Warehouse } from '../../types/index.js';
+import type { AuditLog, Inventory, PurchaseOrder, Shipment, Supplier, User, Warehouse } from '../../types/index.js';
 
 const now = () => new Date().toISOString();
 
@@ -20,7 +20,7 @@ export const users: User[] = [
     password: 'purchase123',
     name: '采购经理',
     roles: ['PURCHASE_MANAGER'],
-    permissions: [PERMISSIONS.DASHBOARD_READ, PERMISSIONS.SUPPLIER_READ, PERMISSIONS.SUPPLIER_WRITE, PERMISSIONS.SHIPMENT_READ, PERMISSIONS.SHIPMENT_WRITE, PERMISSIONS.INVENTORY_READ, PERMISSIONS.AUDIT_READ],
+    permissions: [PERMISSIONS.DASHBOARD_READ, PERMISSIONS.SUPPLIER_READ, PERMISSIONS.SUPPLIER_WRITE, PERMISSIONS.SHIPMENT_READ, PERMISSIONS.SHIPMENT_WRITE, PERMISSIONS.INVENTORY_READ, PERMISSIONS.AUDIT_READ, PERMISSIONS.PURCHASE_ORDER_READ, PERMISSIONS.PURCHASE_ORDER_WRITE],
   },
   {
     id: 'u-warehouse',
@@ -28,7 +28,7 @@ export const users: User[] = [
     password: 'warehouse123',
     name: '仓库经理',
     roles: ['WAREHOUSE_MANAGER'],
-    permissions: [PERMISSIONS.DASHBOARD_READ, PERMISSIONS.SUPPLIER_READ, PERMISSIONS.SHIPMENT_READ, PERMISSIONS.SHIPMENT_RECEIVE, PERMISSIONS.INVENTORY_READ, PERMISSIONS.INVENTORY_WRITE, PERMISSIONS.AUDIT_READ],
+    permissions: [PERMISSIONS.DASHBOARD_READ, PERMISSIONS.SUPPLIER_READ, PERMISSIONS.SHIPMENT_READ, PERMISSIONS.SHIPMENT_RECEIVE, PERMISSIONS.INVENTORY_READ, PERMISSIONS.INVENTORY_WRITE, PERMISSIONS.AUDIT_READ, PERMISSIONS.PURCHASE_ORDER_READ, PERMISSIONS.PURCHASE_ORDER_RECEIVE],
   },
 ];
 
@@ -104,6 +104,101 @@ export const shipments: Shipment[] = Array.from({ length: 15 }, (_, index) => {
     updatedAt: createdAt,
   };
 });
+
+export const purchaseOrders: PurchaseOrder[] = [
+  {
+    id: 'po-1',
+    orderNo: 'PO-20260901-0001',
+    supplierId: 'sup-1',
+    warehouseId: 'wh-east',
+    status: PurchaseOrderStatus.PENDING_APPROVAL,
+    remark: '季度补货',
+    items: [
+      { id: uuid(), skuId: 'SKU-1000', skuName: '轴承组件', orderedQuantity: 100, acceptedQuantity: 0 },
+      { id: uuid(), skuId: 'SKU-1001', skuName: '包装纸箱', orderedQuantity: 200, acceptedQuantity: 0 },
+    ],
+    receipts: [],
+    timeline: [{ id: uuid(), action: 'CREATE', operator: '采购经理', note: '创建采购单', createdAt: now() }],
+    createdBy: 'u-purchase',
+    createdAt: now(),
+    updatedAt: now(),
+  },
+  {
+    id: 'po-2',
+    orderNo: 'PO-20260905-0002',
+    supplierId: 'sup-2',
+    warehouseId: 'wh-south',
+    status: PurchaseOrderStatus.APPROVED,
+    remark: '',
+    items: [
+      { id: 'po-2-item-1', skuId: 'SKU-1002', skuName: '温控芯片', orderedQuantity: 120, acceptedQuantity: 0 },
+      { id: 'po-2-item-2', skuId: 'SKU-1003', skuName: '食品托盘', orderedQuantity: 60, acceptedQuantity: 0 },
+    ],
+    receipts: [],
+    timeline: [{ id: uuid(), action: 'APPROVE', operator: '系统管理员', note: '审核通过，订购数量冻结', createdAt: now() }],
+    createdBy: 'u-purchase',
+    createdAt: now(),
+    updatedAt: now(),
+  },
+  {
+    id: 'po-3',
+    orderNo: 'PO-20260910-0003',
+    supplierId: 'sup-1',
+    warehouseId: 'wh-east',
+    status: PurchaseOrderStatus.PARTIAL_RECEIVED,
+    remark: '分批到货示例',
+    items: [
+      { id: 'po-3-item-1', skuId: 'SKU-1000', skuName: '轴承组件', orderedQuantity: 100, acceptedQuantity: 60 },
+      { id: 'po-3-item-2', skuId: 'SKU-1001', skuName: '包装纸箱', orderedQuantity: 80, acceptedQuantity: 80 },
+    ],
+    receipts: [
+      {
+        id: uuid(),
+        batchNo: 'BATCH-20260912-01',
+        items: [
+          { id: uuid(), itemId: 'po-3-item-1', skuId: 'SKU-1000', skuName: '轴承组件', receivedQuantity: 65, acceptedQuantity: 60, rejectedQuantity: 5 },
+          { id: uuid(), itemId: 'po-3-item-2', skuId: 'SKU-1001', skuName: '包装纸箱', receivedQuantity: 80, acceptedQuantity: 80, rejectedQuantity: 0 },
+        ],
+        operator: '仓库经理',
+        remark: '5 件外观破损拒收',
+        arrivedAt: now(),
+        createdAt: now(),
+      },
+    ],
+    timeline: [{ id: uuid(), action: 'RECEIVE', operator: '仓库经理', note: '登记批次BATCH-20260912-01到货', createdAt: now() }],
+    createdBy: 'u-purchase',
+    createdAt: now(),
+    updatedAt: now(),
+  },
+  {
+    id: 'po-4',
+    orderNo: 'PO-20260912-0004',
+    supplierId: 'sup-3',
+    warehouseId: 'wh-north',
+    status: PurchaseOrderStatus.CLOSED,
+    remark: '一次到齐',
+    items: [
+      { id: 'po-4-item-1', skuId: 'SKU-1004', skuName: '防潮薄膜', orderedQuantity: 40, acceptedQuantity: 40 },
+    ],
+    receipts: [
+      {
+        id: uuid(),
+        batchNo: 'BATCH-20260915-01',
+        items: [
+          { id: uuid(), itemId: 'po-4-item-1', skuId: 'SKU-1004', skuName: '防潮薄膜', receivedQuantity: 40, acceptedQuantity: 40, rejectedQuantity: 0 },
+        ],
+        operator: '仓库经理',
+        remark: '',
+        arrivedAt: now(),
+        createdAt: now(),
+      },
+    ],
+    timeline: [{ id: uuid(), action: 'RECEIVE', operator: '仓库经理', note: '登记批次BATCH-20260915-01到货', createdAt: now() }],
+    createdBy: 'u-purchase',
+    createdAt: now(),
+    updatedAt: now(),
+  },
+];
 
 export const auditLogs: AuditLog[] = [
   { id: uuid(), userId: 'u-admin', username: '系统管理员', action: 'CREATE', module: 'SUPPLIER', targetId: 'sup-1', targetName: '远航包装', detail: { source: 'seed' }, ip: '127.0.0.1', createdAt: now() },

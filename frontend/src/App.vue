@@ -13,6 +13,7 @@ const nav = [
   ['/dashboard', '总览'],
   ['/suppliers', '供应商'],
   ['/inventory', '库存'],
+  ['/purchase-orders', '采购单'],
   ['/shipments', '运单'],
   ['/audit-logs', '审计'],
 ];
