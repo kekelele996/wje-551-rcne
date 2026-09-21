@@ -1,4 +1,4 @@
-import { InventoryAlertLevel, ShipmentStatus, SupplierStatus } from '../constants/enums.js';
+import { InventoryAlertLevel, PurchaseOrderStatus, ShipmentStatus, SupplierStatus } from '../constants/enums.js';
 
 export type RoleCode = 'ADMIN' | 'PURCHASE_MANAGER' | 'WAREHOUSE_MANAGER' | 'VIEWER';
 
@@ -87,12 +87,57 @@ export interface TimelineEvent {
   createdAt: string;
 }
 
+export interface PurchaseOrderItem {
+  id: string;
+  orderId: string;
+  skuId: string;
+  skuName: string;
+  orderedQuantity: number;
+  acceptedQuantity: number;
+}
+
+export interface PurchaseReceiptItem {
+  skuId: string;
+  receivedQuantity: number;
+  acceptedQuantity: number;
+}
+
+export interface PurchaseReceipt {
+  id: string;
+  orderId: string;
+  batchNo: string;
+  receivedQuantity: number;
+  acceptedQuantity: number;
+  rejectedQuantity: number;
+  items: PurchaseReceiptItem[];
+  operator: string;
+  remark: string;
+  createdAt: string;
+}
+
+export interface PurchaseOrder {
+  id: string;
+  orderNo: string;
+  supplierId: string;
+  warehouseId: string;
+  status: PurchaseOrderStatus;
+  remark: string;
+  items: PurchaseOrderItem[];
+  receipts: PurchaseReceipt[];
+  approvedAt?: string;
+  approver?: string;
+  closedAt?: string;
+  createdBy: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
 export interface AuditLog {
   id: string;
   userId: string;
   username: string;
   action: 'CREATE' | 'UPDATE' | 'DELETE' | 'STATUS_CHANGE';
-  module: 'SUPPLIER' | 'INVENTORY' | 'SHIPMENT' | 'USER';
+  module: 'SUPPLIER' | 'INVENTORY' | 'SHIPMENT' | 'USER' | 'PURCHASE_ORDER';
   targetId: string;
   targetName: string;
   detail: unknown;

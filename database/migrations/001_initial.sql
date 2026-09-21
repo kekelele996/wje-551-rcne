@@ -105,6 +105,59 @@ CREATE TABLE shipment_items (
   INDEX idx_shipment_items_shipment_id (shipment_id)
 );
 
+CREATE TABLE purchase_orders (
+  id VARCHAR(36) PRIMARY KEY,
+  order_no VARCHAR(32) NOT NULL,
+  supplier_id VARCHAR(36) NOT NULL,
+  warehouse_id VARCHAR(36) NOT NULL,
+  status ENUM('DRAFT','APPROVED','PARTIAL_RECEIVED','CLOSED') NOT NULL DEFAULT 'DRAFT',
+  remark TEXT,
+  approved_at DATETIME NULL,
+  approver VARCHAR(64),
+  closed_at DATETIME NULL,
+  created_by VARCHAR(64) NOT NULL,
+  created_at DATETIME NOT NULL,
+  updated_at DATETIME NOT NULL,
+  UNIQUE KEY uk_purchase_orders_order_no (order_no),
+  INDEX idx_purchase_orders_supplier_id (supplier_id),
+  INDEX idx_purchase_orders_warehouse_id (warehouse_id),
+  INDEX idx_purchase_orders_status (status)
+);
+
+CREATE TABLE purchase_order_items (
+  id VARCHAR(36) PRIMARY KEY,
+  order_id VARCHAR(36) NOT NULL,
+  sku_id VARCHAR(64) NOT NULL,
+  sku_name VARCHAR(128) NOT NULL,
+  ordered_quantity INT NOT NULL,
+  accepted_quantity INT NOT NULL DEFAULT 0,
+  UNIQUE KEY uk_purchase_order_items_order_sku (order_id, sku_id),
+  INDEX idx_purchase_order_items_order_id (order_id)
+);
+
+CREATE TABLE purchase_receipts (
+  id VARCHAR(36) PRIMARY KEY,
+  order_id VARCHAR(36) NOT NULL,
+  batch_no VARCHAR(64) NOT NULL,
+  received_quantity INT NOT NULL,
+  accepted_quantity INT NOT NULL,
+  rejected_quantity INT NOT NULL DEFAULT 0,
+  operator VARCHAR(64) NOT NULL,
+  remark TEXT,
+  created_at DATETIME NOT NULL,
+  UNIQUE KEY uk_purchase_receipts_batch_no (batch_no),
+  INDEX idx_purchase_receipts_order_id (order_id)
+);
+
+CREATE TABLE purchase_receipt_items (
+  id VARCHAR(36) PRIMARY KEY,
+  receipt_id VARCHAR(36) NOT NULL,
+  sku_id VARCHAR(64) NOT NULL,
+  received_quantity INT NOT NULL,
+  accepted_quantity INT NOT NULL,
+  INDEX idx_purchase_receipt_items_receipt_id (receipt_id)
+);
+
 CREATE TABLE audit_logs (
   id VARCHAR(36) PRIMARY KEY,
   user_id VARCHAR(36) NOT NULL,

@@ -3,6 +3,7 @@ import { auditRoutes } from './routes/audit.routes.js';
 import { authRoutes } from './routes/auth.routes.js';
 import { dashboardRoutes } from './routes/dashboard.routes.js';
 import { inventoryRoutes, warehouseRoutes } from './routes/inventory.routes.js';
+import { purchaseOrdersRoutes } from './routes/purchase-orders.routes.js';
 import { shipmentsRoutes } from './routes/shipments.routes.js';
 import { suppliersRoutes } from './routes/suppliers.routes.js';
 
@@ -13,6 +14,7 @@ export function registerRoutes(app: Express) {
   app.use('/api/v1/warehouses', warehouseRoutes);
   app.use('/api/v1/inventory', inventoryRoutes);
   app.use('/api/v1/shipments', shipmentsRoutes);
+  app.use('/api/v1/purchase-orders', purchaseOrdersRoutes);
   app.use('/api/v1/dashboard', dashboardRoutes);
   app.use('/api/v1/audit-logs', auditRoutes);
 }

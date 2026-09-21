@@ -30,6 +30,20 @@ export const SupplierStatusLabel: Record<SupplierStatus, string> = {
   [SupplierStatus.PENDING_REVIEW]: '待审核',
 };
 
+export enum PurchaseOrderStatus {
+  DRAFT = 'DRAFT',
+  APPROVED = 'APPROVED',
+  PARTIAL_RECEIVED = 'PARTIAL_RECEIVED',
+  CLOSED = 'CLOSED',
+}
+
+export const PurchaseOrderStatusLabel: Record<PurchaseOrderStatus, string> = {
+  [PurchaseOrderStatus.DRAFT]: '待审核',
+  [PurchaseOrderStatus.APPROVED]: '已审核待到货',
+  [PurchaseOrderStatus.PARTIAL_RECEIVED]: '部分到货',
+  [PurchaseOrderStatus.CLOSED]: '已关闭',
+};
+
 export enum InventoryAlertLevel {
   NORMAL = 'NORMAL',
   LOW = 'LOW',

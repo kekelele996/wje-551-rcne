@@ -1,22 +1,26 @@
 <script setup lang="ts">
 import { computed } from 'vue';
-import { InventoryAlertLevelLabel, ShipmentStatusLabel, SupplierStatusLabel } from '../../constants/enums';
+import { InventoryAlertLevelLabel, PurchaseOrderStatusLabel, ShipmentStatusLabel, SupplierStatusLabel } from '../../constants/enums';
 
 const props = defineProps<{ value: string }>();
 
-const labels: Record<string, string> = { ...ShipmentStatusLabel, ...SupplierStatusLabel, ...InventoryAlertLevelLabel };
+const labels: Record<string, string> = { ...ShipmentStatusLabel, ...SupplierStatusLabel, ...InventoryAlertLevelLabel, ...PurchaseOrderStatusLabel };
 const tone = computed(() => ({
   ACTIVE: 'ok',
   DELIVERED: 'ok',
+  CLOSED: 'ok',
   NORMAL: 'ok',
   LOW: 'warn',
+  APPROVED: 'blue',
   SHIPPED: 'blue',
   IN_TRANSIT: 'warn',
+  PARTIAL_RECEIVED: 'warn',
   CRITICAL: 'danger',
   EXCEPTION: 'danger',
   BLACKLISTED: 'danger',
   PENDING: 'muted',
   PENDING_REVIEW: 'muted',
+  DRAFT: 'muted',
   CANCELLED: 'muted',
   INACTIVE: 'muted',
 }[props.value] ?? 'muted'));

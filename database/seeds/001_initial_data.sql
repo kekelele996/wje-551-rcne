@@ -34,3 +34,24 @@ INSERT INTO shipment_items (id, shipment_id, sku_id, sku_name, quantity) VALUES
 ('si-1', 'ship-1', 'SKU-1000', '轴承组件', 20),
 ('si-2', 'ship-2', 'SKU-1001', '包装纸箱', 60),
 ('si-3', 'ship-3', 'SKU-1002', '温控芯片', 15);
+
+INSERT INTO purchase_orders (id, order_no, supplier_id, warehouse_id, status, remark, approved_at, approver, closed_at, created_by, created_at, updated_at) VALUES
+('po-1', 'PO-20260918-0001', 'sup-1', 'wh-east', 'APPROVED', '季度常备物料补货', DATE_SUB(NOW(), INTERVAL 2 DAY), '采购经理', NULL, '采购经理', DATE_SUB(NOW(), INTERVAL 3 DAY), DATE_SUB(NOW(), INTERVAL 2 DAY)),
+('po-2', 'PO-20260915-0002', 'sup-2', 'wh-south', 'PARTIAL_RECEIVED', '产线急料，分批到货', DATE_SUB(NOW(), INTERVAL 5 DAY), '采购经理', NULL, '采购经理', DATE_SUB(NOW(), INTERVAL 6 DAY), DATE_SUB(NOW(), INTERVAL 3 DAY)),
+('po-3', 'PO-20260909-0003', 'sup-1', 'wh-north', 'CLOSED', '一次性到货合格，已关闭', DATE_SUB(NOW(), INTERVAL 11 DAY), '系统管理员', DATE_SUB(NOW(), INTERVAL 10 DAY), '采购经理', DATE_SUB(NOW(), INTERVAL 12 DAY), DATE_SUB(NOW(), INTERVAL 10 DAY));
+
+INSERT INTO purchase_order_items (id, order_id, sku_id, sku_name, ordered_quantity, accepted_quantity) VALUES
+('poi-1', 'po-1', 'SKU-1000', '轴承组件', 100, 0),
+('poi-2', 'po-1', 'SKU-1010', '包装纸箱', 200, 0),
+('poi-3', 'po-2', 'SKU-1002', '温控芯片', 80, 50),
+('poi-4', 'po-2', 'SKU-1012', '防潮薄膜', 120, 60),
+('poi-5', 'po-3', 'SKU-1004', '食品托盘', 60, 60);
+
+INSERT INTO purchase_receipts (id, order_id, batch_no, received_quantity, accepted_quantity, rejected_quantity, operator, remark, created_at) VALUES
+('pr-1', 'po-2', 'RCV-20260918-0001', 120, 110, 10, '仓库经理', '首批到货，10 件外观不合格拒收', DATE_SUB(NOW(), INTERVAL 3 DAY)),
+('pr-2', 'po-3', 'RCV-20260911-0001', 60, 60, 0, '仓库经理', '全部合格', DATE_SUB(NOW(), INTERVAL 10 DAY));
+
+INSERT INTO purchase_receipt_items (id, receipt_id, sku_id, received_quantity, accepted_quantity) VALUES
+('pri-1', 'pr-1', 'SKU-1002', 55, 50),
+('pri-2', 'pr-1', 'SKU-1012', 65, 60),
+('pri-3', 'pr-2', 'SKU-1004', 60, 60);

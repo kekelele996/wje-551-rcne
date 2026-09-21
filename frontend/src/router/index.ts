@@ -6,6 +6,8 @@ import Dashboard from '../pages/Dashboard.vue';
 import Forbidden from '../pages/Forbidden.vue';
 import Inventory from '../pages/Inventory.vue';
 import Login from '../pages/Login.vue';
+import PurchaseOrderDetail from '../pages/PurchaseOrderDetail.vue';
+import PurchaseOrders from '../pages/PurchaseOrders.vue';
 import ShipmentDetail from '../pages/ShipmentDetail.vue';
 import Shipments from '../pages/Shipments.vue';
 import SupplierDetail from '../pages/SupplierDetail.vue';
@@ -22,6 +24,8 @@ export const router = createRouter({
     { path: '/inventory', component: Inventory, meta: { permission: PERMISSIONS.INVENTORY_READ } },
     { path: '/shipments', component: Shipments, meta: { permission: PERMISSIONS.SHIPMENT_READ } },
     { path: '/shipments/:id', component: ShipmentDetail, meta: { permission: PERMISSIONS.SHIPMENT_READ } },
+    { path: '/purchase-orders', component: PurchaseOrders, meta: { permission: PERMISSIONS.PURCHASE_ORDER_READ } },
+    { path: '/purchase-orders/:id', component: PurchaseOrderDetail, meta: { permission: PERMISSIONS.PURCHASE_ORDER_READ } },
     { path: '/audit-logs', component: AuditLog, meta: { permission: PERMISSIONS.AUDIT_READ } },
     { path: '/403', component: Forbidden },
   ],

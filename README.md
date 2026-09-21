@@ -6,6 +6,7 @@
 
 - 供应链总览仪表盘：在途、待签收、低库存、活跃供应商、状态分布与预警列表。
 - 供应商管理：搜索筛选、审核、评分、详情与关联运单。
+- 采购订单与分批到货：按供应商和目标仓库提交多行订单，审核后数量冻结；仓库登记唯一批次的到货数/合格数，拒收品只留记录、合格品入目标仓库；累计合格不得超过订购，超收或批次重复整次不生效，部分合格显示部分到货、全部合格自动关闭，关闭后不可改单。
 - 库存管理：仓库维度库存查询、入库、出库、调拨、盘点和安全库存预警。
 - 运单追踪：运单列表、状态流转、发货、在途、签收自动入库、异常和取消。
 - 横切能力：JWT 登录、角色权限、前端路由守卫、按钮级 `v-permission`、统一异常处理、审计日志。
@@ -127,6 +128,22 @@ JWT_EXPIRES_IN=7d
 | 前端页面 | frontend/src/pages/Shipments.vue |
 | 前端页面 | frontend/src/pages/ShipmentDetail.vue |
 | 前端页面 | frontend/src/pages/Dashboard.vue |
+| 数据库迁移 | database/migrations/001_initial.sql |
+| 种子数据 | database/seeds/001_initial_data.sql |
+
+### PurchaseOrderStatus
+
+| 位置 | 文件路径 |
+|------|---------|
+| 后端枚举定义 | backend/src/constants/enums.ts |
+| 后端实体 | backend/src/models/purchase-order.entity.ts |
+| 后端服务 | backend/src/services/purchase-orders.service.ts |
+| 后端控制器 | backend/src/controllers/purchase-orders.controller.ts |
+| 前端枚举定义 | frontend/src/constants/enums.ts |
+| 前端类型 | frontend/src/types/purchase-order.d.ts |
+| 前端组件 | frontend/src/components/common/StatusBadge.vue |
+| 前端页面 | frontend/src/pages/PurchaseOrders.vue |
+| 前端页面 | frontend/src/pages/PurchaseOrderDetail.vue |
 | 数据库迁移 | database/migrations/001_initial.sql |
 | 种子数据 | database/seeds/001_initial_data.sql |
 
